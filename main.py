@@ -22,11 +22,15 @@ def enrich_endpoint():
         title = " ".join( prog.find('title').text.split(" ")[:4] )
         data = prog_data.get(title, {})
 
-        icon_src = data.get('img', '')
-        categories = data.get('cat', [])
+        icon_src = data.get('img', ' ')
+        categories = data.get('cat', [' '])
+        subtitle = data.get('subt', ' ')
 
         prog_icon = ET.SubElement(prog, 'icon')
         prog_icon.set('src', icon_src)
+
+        prog_subtitle = ET.SubElement(prog, 'subtitle')
+        prog_subtitle.text = subtitle
 
         for cat in categories:
             prog_categ = ET.SubElement(prog, 'category')

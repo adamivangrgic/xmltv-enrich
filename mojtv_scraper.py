@@ -54,7 +54,7 @@ def get_prog_data(url):
         categories = [mojtv_cat.get(category_raw)]
         categories.extend( subtitle.split(" ") )
 
-        prog_data.update({short_title: { 'img': "https:" + larger_img, 'cat': list(set( categories )) }})
+        prog_data.update({short_title: { 'img': "https:" + larger_img, 'cat': list(set( categories )), 'subt': subtitle }})
 
     return prog_data
 
