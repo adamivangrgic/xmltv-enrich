@@ -29,8 +29,12 @@ def enrich_endpoint():
         prog_icon = ET.SubElement(prog, 'icon')
         prog_icon.set('src', icon_src)
 
-        prog_subtitle = ET.SubElement(prog, 'sub-title')
-        prog_subtitle.text = subtitle
+        if subtitle:
+            prog_subtitle = ET.SubElement(prog, 'sub-title')
+            prog_subtitle.text = subtitle
+        else:
+            empty_subtitle = prog.find('sub-title')
+            prog.remove(empty_subtitle)
 
         for cat in categories:
             #if cat:
