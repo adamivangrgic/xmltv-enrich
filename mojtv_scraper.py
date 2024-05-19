@@ -53,8 +53,9 @@ def get_prog_data(url):
         larger_img = img.replace("w=150", "w=360")
         categories = [mojtv_cat.get(category_raw)]
         categories.extend( subtitle.split(" ") )
+        categories = list(set(filter(None, categories)))
 
-        prog_data.update({short_title: { 'img': "https:" + larger_img, 'cat': list(set( categories )), 'subt': subtitle }})
+        prog_data.update({short_title: { 'img': "https:" + larger_img, 'cat': categories, 'subt': subtitle }})
 
     return prog_data
 

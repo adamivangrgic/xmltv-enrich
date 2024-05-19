@@ -33,6 +33,7 @@ def enrich_endpoint():
         prog_subtitle.text = subtitle
 
         for cat in categories:
+            #if cat:
             prog_categ = ET.SubElement(prog, 'category')
             prog_categ.set('lang', 'hr')
             prog_categ.text = cat
