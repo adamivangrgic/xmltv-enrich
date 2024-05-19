@@ -29,7 +29,7 @@ def enrich_endpoint():
         prog_icon = ET.SubElement(prog, 'icon')
         prog_icon.set('src', icon_src)
 
-        prog_subtitle = ET.SubElement(prog, 'subtitle')
+        prog_subtitle = ET.SubElement(prog, 'sub-title')
         prog_subtitle.text = subtitle
 
         for cat in categories:
