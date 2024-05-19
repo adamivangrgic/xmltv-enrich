@@ -43,11 +43,11 @@ def get_prog_data(url):
         try:
             category_raw = programme.find("span", {'class': 'show-category'}).find("img").get("src")
         except:
-            category_raw = ""
+            category_raw = " "
         try:
             img = programme.find("a").find("img").get("src")
         except:
-            img = ""
+            img = " "
 
         short_title = " ".join(title.split(" ")[:4])
         larger_img = img.replace("w=150", "w=360")
