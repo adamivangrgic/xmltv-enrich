@@ -69,7 +69,10 @@ def enrich_endpoint():
 
         if episode_num and episode_num != ' ':
             prog_episode_num = ET.SubElement(prog, 'episode-num')
-            prog_episode_num.set('system', 'SxxExx')
+            if '/' in episode_num:
+                prog_episode_num.set('system', 'xmltv_ns')
+            else:
+                prog_episode_num.set('system', 'SxxExx')
             prog_episode_num.text = episode_num
 
         ##
