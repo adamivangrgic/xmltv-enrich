@@ -19,7 +19,9 @@ def enrich_endpoint():
     prog_data = scrape(channel_ids=[1,2,310,3,4,185,186,341,370])
     
     for prog in tree.iter('programme'):
-        title = " ".join( prog.find('title').text.split(" ")[:4] )
+        long_title = prog.find('title').text
+        title = " ".join( long_title.split(" ")[:4] )
+        
         start_time_raw = prog.attrib.get('start', '')
         if len(start_time_raw) > 11:
             start_time = start_time_raw[8:12]
@@ -69,6 +71,23 @@ def enrich_endpoint():
             prog_episode_num = ET.SubElement(prog, 'episode-num')
             prog_episode_num.set('system', episode_num[0])
             prog_episode_num.text = episode_num[1]
+
+        ##
+
+        l_long_title = long_title.lower()
+        l_subtitle = subtitle.lower()
+
+        if ("nove epizode" in l_long_title or "nove epizode" in l_subtitle) or ("nova sezona" in l_long_title or "nova sezona" in l_subtitle):
+            prog_new = ET.SubElement(prog, 'new')
+
+        if ("prijenos" in l_long_title or "prijenos" in l_subtitle) or ("uživo" in l_long_title or "uživo" in l_subtitle):
+            prog_live = ET.SubElement(prog, 'live')
+
+        if "(R)" in long_title or "(R)" in subtitle:
+            prog_repeat = ET.SubElement(prog, 'previously-shown')
+
+        if "premijera" in l_long_title or "premijera" in l_subtitle:
+            prog_premiere = ET.SubElement(prog, 'premiere')
 
         ##
 
