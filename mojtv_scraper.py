@@ -96,26 +96,29 @@ def get_prog_data(url):
         ##
 
         season_episode_search = re.search(r'S([0-9]+) E([0-9]+)', subtitle)
-        season_episode_search_2 = re.search(r'\(([0-9]+)\/([0-9]+)\)', subtitle)
+        # season_episode_search_2 = re.search(r'\(([0-9]+)\/([0-9]+)\)', subtitle)
 
         if season_episode_search:
             se_num = season_episode_search.group(1)
             ep_num = season_episode_search.group(2)
             
             episode_num = "S{s}E{e}".format(s=se_num, e=ep_num)
+            episode_num_system = "SxxExx"
         
-        elif season_episode_search_2:
-            se_num = season_episode_search_2.group(1)
-            ep_num = season_episode_search_2.group(2)
+        # elif season_episode_search_2:
+        #     ep_num = int(season_episode_search_2.group(1)) - 1
+        #     ep_left = int(season_episode_search_2.group(2)) - 1
             
-            episode_num = ".{s}/{e}.".format(s=se_num, e=ep_num) 
+        #     episode_num = ".{en}/{el}.".format(en=ep_num, el=ep_left)
+        #     episode_num_system = "xmltv_ns"
         
         else:
             episode_num = " "
+            episode_num_system = " "
 
         ##
 
-        prog_data.update({short_title + start_time: { 'img': "https:" + larger_img, 'cat': categories, 'subt': subtitle, 'ep_num': episode_num }})
+        prog_data.update({short_title + start_time: { 'img': "https:" + larger_img, 'cat': categories, 'subt': subtitle, 'ep_num': [episode_num_system, episode_num] }})
 
     return prog_data
 

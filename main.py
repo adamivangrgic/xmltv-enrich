@@ -31,7 +31,7 @@ def enrich_endpoint():
         icon_src = data.get('img', ' ')
         categories = data.get('cat', [' '])
         subtitle = data.get('subt', ' ')
-        episode_num = data.get('ep_num', ' ')
+        episode_num = data.get('ep_num', {})
 
         ##
 
@@ -44,14 +44,12 @@ def enrich_endpoint():
         empty_subtitle = prog.find('sub-title')
         prog.remove(empty_subtitle)
 
-        if not (subtitle and subtitle != ' '):
-            subtitle_in_title = prog.find('title').text.split(', ')
-
-            if len(subtitle_in_title) > 1:
-                subtitle = subtitle_in_title[1]
-
-                categories.extend( subtitle.split(' ') )
-                categories = list(set(categories))
+        #if not (subtitle and subtitle != ' '):
+        subtitle_in_title = prog.find('title').text.split(', ')
+        if len(subtitle_in_title) > 1:
+            subtitle = subtitle_in_title[1]
+            categories.extend( subtitle.split(' ') )
+            categories = list(set(filter(None, categories)))
         
         if subtitle and subtitle != ' ':
             prog_subtitle = ET.SubElement(prog, 'sub-title')
@@ -67,13 +65,10 @@ def enrich_endpoint():
 
         ##
 
-        if episode_num and episode_num != ' ':
+        if episode_num and episode_num[0] != ' ':
             prog_episode_num = ET.SubElement(prog, 'episode-num')
-            if '/' in episode_num:
-                prog_episode_num.set('system', 'xmltv_ns')
-            else:
-                prog_episode_num.set('system', 'SxxExx')
-            prog_episode_num.text = episode_num
+            prog_episode_num.set('system', episode_num[0])
+            prog_episode_num.text = episode_num[1]
 
         ##
 
