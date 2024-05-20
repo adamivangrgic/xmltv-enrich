@@ -48,7 +48,7 @@ def enrich_endpoint():
         subtitle_in_title = prog.find('title').text.split(', ')
         if len(subtitle_in_title) > 1:
             subtitle = subtitle_in_title[1]
-            categories.extend( subtitle.split(' ') )
+            categories.extend( subtitle.split(" ") )
             categories = list(set(filter(None, categories)))
         
         if subtitle and subtitle != ' ':

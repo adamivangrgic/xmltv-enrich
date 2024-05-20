@@ -68,7 +68,7 @@ def get_prog_data(url):
         except:
             category_raw = " "
         try:
-            img = programme.find("a").find("img").get("src")
+            img = programme.find("img", {"class": "movieinfoimg"}).get("src")
         except:
             img = " "
 
