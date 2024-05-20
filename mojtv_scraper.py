@@ -102,13 +102,13 @@ def get_prog_data(url):
             se_num = season_episode_search.group(1)
             ep_num = season_episode_search.group(2)
             
-            episode_num = "{s}/{e}".format(s=se_num, e=ep_num)
+            episode_num = "S{s}E{e}".format(s=se_num, e=ep_num)
         
         elif season_episode_search_2:
             se_num = season_episode_search_2.group(1)
             ep_num = season_episode_search_2.group(2)
             
-            episode_num = "S{s}E{e}".format(s=se_num, e=ep_num) 
+            episode_num = ".{s}/{e}.".format(s=se_num, e=ep_num) 
         
         else:
             episode_num = " "
