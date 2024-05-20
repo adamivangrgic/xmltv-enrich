@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import re
 
 mojtv_cat = {'/controlimg/program/k6.gif': 'serija', '/controlimg/program/k5.gif': 'film', '/controlimg/program/k2.gif': 'sport'}
 
@@ -89,7 +90,32 @@ def get_prog_data(url):
 
         ##
 
-        prog_data.update({short_title: { 'img': "https:" + larger_img, 'cat': categories, 'subt': subtitle }})
+        start_time_raw = programme.find("span", {"class": "show-time"}).find("b").text
+        start_time = start_time_raw.replace(":", "")
+
+        ##
+
+        season_episode_search = re.search(r'S([0-9]+) E([0-9]+)', subtitle)
+        season_episode_search_2 = re.search(r'\(([0-9]+)\/([0-9]+)\)', subtitle)
+
+        if season_episode_search:
+            se_num = season_episode_search.group(1)
+            ep_num = season_episode_search.group(2)
+            
+            episode_num = "{s}/{e}".format(s=se_num, e=ep_num)
+        
+        elif season_episode_search_2:
+            se_num = season_episode_search_2.group(1)
+            ep_num = season_episode_search_2.group(2)
+            
+            episode_num = "S{s}E{e}".format(s=se_num, e=ep_num) 
+        
+        else:
+            episode_num = " "
+
+        ##
+
+        prog_data.update({short_title + start_time: { 'img': "https:" + larger_img, 'cat': categories, 'subt': subtitle, 'ep_num': episode_num }})
 
     return prog_data
 

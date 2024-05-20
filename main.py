@@ -20,11 +20,18 @@ def enrich_endpoint():
     
     for prog in tree.iter('programme'):
         title = " ".join( prog.find('title').text.split(" ")[:4] )
-        data = prog_data.get(title, {})
+        start_time_raw = prog.attrib.get('start', '')
+        if len(start_time_raw) > 11:
+            start_time = start_time_raw[8:12]
+        else:
+            start_time = ''
+        
+        data = prog_data.get(title + start_time, {})
 
         icon_src = data.get('img', ' ')
         categories = data.get('cat', [' '])
         subtitle = data.get('subt', ' ')
+        episode_num = data.get('ep_num', ' ')
 
         ##
 
@@ -57,6 +64,15 @@ def enrich_endpoint():
                 prog_categ = ET.SubElement(prog, 'category')
                 prog_categ.set('lang', 'hr')
                 prog_categ.text = cat
+
+        ##
+
+        if episode_num and episode_num != ' ':
+            prog_episode_num = ET.SubElement(prog, 'episode-num')
+            prog_episode_num.set('system', 'SxxExx')
+            prog_episode_num.text = episode_num
+
+        ##
 
         ET.dump(prog)
     
