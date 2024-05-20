@@ -26,16 +26,31 @@ def enrich_endpoint():
         categories = data.get('cat', [' '])
         subtitle = data.get('subt', ' ')
 
+        ##
+
         if icon_src and icon_src != ' ':
             prog_icon = ET.SubElement(prog, 'icon')
             prog_icon.set('src', icon_src)
 
+        ##
+
         empty_subtitle = prog.find('sub-title')
         prog.remove(empty_subtitle)
+
+        if not (subtitle and subtitle != ' '):
+            subtitle_in_title = prog.find('title').text.split(', ')
+
+            if len(subtitle_in_title) > 1:
+                subtitle = subtitle_in_title[1]
+
+                categories.extend( subtitle.split(' ') )
+                categories = list(set(categories))
         
         if subtitle and subtitle != ' ':
             prog_subtitle = ET.SubElement(prog, 'sub-title')
             prog_subtitle.text = subtitle
+
+        ##
             
         for cat in categories:
             if cat and cat != ' ':
