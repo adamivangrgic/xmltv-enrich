@@ -24,7 +24,7 @@ def enrich_endpoint():
         
         start_time_raw = prog.attrib.get('start', '')
         if len(start_time_raw) > 11:
-            start_time = start_time_raw[8:12]
+            start_time = start_time_raw[0:12]
         else:
             start_time = ''
         

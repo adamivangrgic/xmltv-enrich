@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import re
+from datetime import date
 
 mojtv_cat = {'/controlimg/program/k6.gif': 'serija', '/controlimg/program/k5.gif': 'film', '/controlimg/program/k2.gif': 'sport'}
 
@@ -53,6 +54,13 @@ def get_prog_data(url):
         global additional_day_urls
 
         additional_day_urls.extend(other_dates_urls)
+
+        url_date = date.today().strftime("%Y%m%d")
+
+    else:
+        url_date_raw = url.split("datum=")[1].split("&id=")[0].split(".")
+        url_date_raw.reverse()
+        url_date = "".join(url_date_raw)
 
     ##
 
@@ -118,7 +126,7 @@ def get_prog_data(url):
 
         ##
 
-        prog_data.update({short_title + start_time: { 'img': "https:" + larger_img, 'cat': categories, 'subt': subtitle, 'ep_num': [episode_num_system, episode_num] }})
+        prog_data.update({short_title + url_date + start_time: { 'img': "https:" + larger_img, 'cat': categories, 'subt': subtitle, 'ep_num': [episode_num_system, episode_num] }})
 
     return prog_data
 
