@@ -95,7 +95,7 @@ def enrich_endpoint():
         ##
 
         ET.dump(prog)
-    print(prog_data)
+
     output_xml = ET.tostring(tree)
     return Response(output_xml, mimetype='text/xml')
 
