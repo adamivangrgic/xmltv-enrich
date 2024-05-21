@@ -77,10 +77,13 @@ def enrich_endpoint():
         l_long_title = long_title.lower()
         l_subtitle = subtitle.lower()
 
-        if ("nove epizode" in l_long_title or "nove epizode" in l_subtitle) or ("nova sezona" in l_long_title or "nova sezona" in l_subtitle):
+        if ("nove epizode" in l_long_title or "nove epizode" in l_subtitle) or \
+            ("nova sezona" in l_long_title or "nova sezona" in l_subtitle) or \
+            ("nova serija" in l_long_title or "nova serija" in l_subtitle):
             prog_new = ET.SubElement(prog, 'new')
 
-        if ("prijenos" in l_long_title or "prijenos" in l_subtitle) or ("uživo" in l_long_title or "uživo" in l_subtitle):
+        if ("prijenos" in l_long_title or "prijenos" in l_subtitle) or \
+            ("uživo" in l_long_title or "uživo" in l_subtitle):
             prog_live = ET.SubElement(prog, 'live')
 
         if "(R)" in long_title or "(R)" in subtitle:
@@ -92,7 +95,7 @@ def enrich_endpoint():
         ##
 
         ET.dump(prog)
-    
+    print(prog_data)
     output_xml = ET.tostring(tree)
     return Response(output_xml, mimetype='text/xml')
 

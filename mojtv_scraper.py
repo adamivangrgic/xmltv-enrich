@@ -59,8 +59,7 @@ def get_prog_data(url):
 
     else:
         url_date_raw = url.split("datum=")[1].split("&id=")[0].split(".")
-        url_date_raw.reverse()
-        url_date = "".join(url_date_raw)
+        url_date = "{}{:02d}{:02d}".format(url_date_raw[2], int(url_date_raw[1]), int(url_date_raw[0]))
 
     ##
 
