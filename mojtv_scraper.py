@@ -85,7 +85,7 @@ def get_prog_data(url):
 
         ##
 
-        larger_img = img.replace("w=150", "w=360")
+        larger_img = img.replace("w=150", "w=491")
 
         ##
 
