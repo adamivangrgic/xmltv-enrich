@@ -1,6 +1,7 @@
 from flask import Flask, request, Response
 import requests
 import xml.etree.ElementTree as ET
+import re
 from mojtv_scraper import scrape
 
 app = Flask(__name__)
@@ -86,7 +87,8 @@ def enrich_endpoint():
             ("uživo" in l_long_title or "uživo" in l_subtitle):
             prog_live = ET.SubElement(prog, 'live')
 
-        if "(R)" in long_title or "(R)" in subtitle:
+        if ("(R)" in long_title or "(R)" in subtitle) or \
+            (re.search(r'R$', long_title) or re.search(r'R$', subtitle)):
             prog_repeat = ET.SubElement(prog, 'previously-shown')
 
         if "premijera" in l_long_title or "premijera" in l_subtitle:
