@@ -9,6 +9,7 @@ app = Flask(__name__)
 @app.route('/')
 def enrich_endpoint():
     origin_url = request.args.get('origin_url')
+    channel_id_list = [int(x) for x in request.args.get('cids').split(',')]
     ###
 
     r = requests.get(origin_url)
@@ -17,7 +18,7 @@ def enrich_endpoint():
 
     tree = ET.fromstring(origin_data) 
 
-    prog_data = scrape(channel_ids=[1,2,310,3,4,185,186,341,370])
+    prog_data = scrape(channel_ids=channel_id_list) # [1,2,310,3,4,185,186,341,370]
     
     for prog in tree.iter('programme'):
         long_title = prog.find('title').text
