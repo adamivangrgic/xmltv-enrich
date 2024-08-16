@@ -7,13 +7,13 @@ mojtv_cat = {'/controlimg/program/k6.gif': 'serija', '/controlimg/program/k5.gif
 
 additional_day_urls = []
 
-mojtv_url = "https://mojtv.hr/m2/tv-program/"
+mojtv_url = "https://mojtv.hr/"
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0"
+}
 
 def get_channels():
-
-    headers = {
-        "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0"
-    }
 
     page = requests.get(mojtv_url, headers=headers).text
     soup = BeautifulSoup(page, 'html.parser')
@@ -23,16 +23,24 @@ def get_channels():
     channel_urls = []
 
     for channel in soup_channel_table:
-        channel_urls.append( mojtv_url + channel.find("a").get("href") )
+        channel_urls.append( mojtv_url + "m2/tv-program/" + channel.find("a").get("href") )
 
     return channel_urls
 
 
-def get_prog_data(url):
+def get_ssn_ep(url_raw):
 
-    headers = {
-        "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0"
-    }
+    url = mojtv_url + url_raw
+    
+    page = requests.get(url, headers=headers).text
+    soup = BeautifulSoup(page, 'html.parser')
+
+    raw_ssn_ep = soup.find("div", {"id": "ContentPlaceHolder1_epizoda"}).find("span").text
+
+    return raw_ssn_ep
+
+
+def get_prog_data(url, cid, ssn_ep_dd_ids):
 
     page = requests.get(url, headers=headers).text
     soup = BeautifulSoup(page, 'html.parser')
@@ -47,7 +55,7 @@ def get_prog_data(url):
 
         for date_li in soup_dates_table:
             date_url = date_li.find("a").get("href")
-            other_dates_urls.append(mojtv_url + date_url)
+            other_dates_urls.append(mojtv_url + "m2/tv-program/" + date_url)
 
         other_dates_urls.pop(0)
 
@@ -70,6 +78,7 @@ def get_prog_data(url):
     for programme in soup_programme_table:
         title = programme.find("a").find("b").text
         subtitle = programme.find("a").find("em").text
+        prog_url = programme.find("a").href
         try:
             category_raw = programme.find("span", {'class': 'show-category'}).find("img").get("src")
         except:
@@ -110,8 +119,11 @@ def get_prog_data(url):
 
         ##
 
-        season_episode_search = re.search(r'S([0-9]+) E([0-9]+)', subtitle)
-        # season_episode_search_2 = re.search(r'\(([0-9]+)\/([0-9]+)\)', subtitle)
+        if cid in ssn_ep_dd_ids:
+            season_episode_search = re.search(r'sez.([0-9]+)  ep.([0-9]+)', get_ssn_ep(prog_url)) 
+        else:
+            season_episode_search = re.search(r'S([0-9]+) E([0-9]+)', subtitle)
+            # season_episode_search_2 = re.search(r'\(([0-9]+)\/([0-9]+)\)', subtitle)
 
         if season_episode_search:
             se_num = season_episode_search.group(1)
@@ -138,7 +150,7 @@ def get_prog_data(url):
     return prog_data
 
 
-def scrape(channel_ids=[]):
+def scrape(channel_ids=[], ssn_ep_dd=[]):
     urls = get_channels()
 
     all_prog = {}
@@ -147,7 +159,7 @@ def scrape(channel_ids=[]):
         channel_id = int(url.split("id=")[1])
 
         if channel_id in channel_ids or channel_ids == []:
-            ch_prog_data = get_prog_data(url)
+            ch_prog_data = get_prog_data(url, channel_id, ssn_ep_dd)
             
             all_prog.update(ch_prog_data)
 
@@ -156,7 +168,7 @@ def scrape(channel_ids=[]):
         channel_id = int(url.split("id=")[1])
 
         if channel_id in channel_ids or channel_ids == []:
-            ch_prog_data = get_prog_data(url)
+            ch_prog_data = get_prog_data(url, channel_id, ssn_ep_dd)
             
             all_prog.update(ch_prog_data)
 

@@ -1,4 +1,4 @@
 git clone  https://@github.com/adamivangrgic/xmltv-enrich.git
 cd xmltv-enrich
 docker build -t xmltv-enrich .
-docker run -dp 9200:5000 xmltv-enrich
+docker run --name xmltv-enrich -dp 9200:5000 xmltv-enrich
