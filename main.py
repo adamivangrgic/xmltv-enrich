@@ -19,7 +19,7 @@ def enrich_endpoint():
 
     tree = ET.fromstring(origin_data) 
 
-    prog_data = scrape(channel_ids=channel_id_list, ssn_ep_dd_ids=ssn_ep_dd_ids_list) # [1,2,310,3,4,185,186,341,370]
+    prog_data = scrape(channel_ids=channel_id_list, ssn_ep_dd=ssn_ep_dd_ids_list) # [1,2,310,3,4,185,186,341,370]
     
     for prog in tree.iter('programme'):
         long_title = prog.find('title').text

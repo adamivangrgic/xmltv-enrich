@@ -15,7 +15,7 @@ headers = {
 
 def get_channels():
 
-    page = requests.get(mojtv_url, headers=headers).text
+    page = requests.get(mojtv_url + "m2/tv-program/", headers=headers).text
     soup = BeautifulSoup(page, 'html.parser')
 
     soup_channel_table = soup.find("div", {"class": "ui-body-b"}).find("ul").find_all("li")
@@ -35,7 +35,10 @@ def get_ssn_ep(url_raw):
     page = requests.get(url, headers=headers).text
     soup = BeautifulSoup(page, 'html.parser')
 
-    raw_ssn_ep = soup.find("div", {"id": "ContentPlaceHolder1_epizoda"}).find("span").text
+    try:
+        raw_ssn_ep = soup.find("div", {"id": "ContentPlaceHolder1_epizoda"}).find("span").text
+    except:
+        raw_ssn_ep = ""
 
     return raw_ssn_ep
 
@@ -78,7 +81,7 @@ def get_prog_data(url, cid, ssn_ep_dd_ids):
     for programme in soup_programme_table:
         title = programme.find("a").find("b").text
         subtitle = programme.find("a").find("em").text
-        prog_url = programme.find("a").href
+        prog_url = programme.find("a").get("href")
         try:
             category_raw = programme.find("span", {'class': 'show-category'}).find("img").get("src")
         except:
@@ -119,7 +122,7 @@ def get_prog_data(url, cid, ssn_ep_dd_ids):
 
         ##
 
-        if cid in ssn_ep_dd_ids:
+        if cid in ssn_ep_dd_ids and "serija" in categories:
             season_episode_search = re.search(r'sez.([0-9]+)  ep.([0-9]+)', get_ssn_ep(prog_url)) 
         else:
             season_episode_search = re.search(r'S([0-9]+) E([0-9]+)', subtitle)
