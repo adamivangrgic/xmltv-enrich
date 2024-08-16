@@ -118,7 +118,9 @@ def get_prog_data(url, cid, ssn_ep_dd_ids):
 
         if not 6 <= prog_hour <= 23:
             next_day_date = datetime.strptime(url_date, "%Y%m%d") + timedelta(days=1)
-            url_date = next_day_date.strftime("%Y%m%d")
+            prog_date = next_day_date.strftime("%Y%m%d")
+        else:
+            prog_date = url_date
 
         ##
 
@@ -148,7 +150,7 @@ def get_prog_data(url, cid, ssn_ep_dd_ids):
 
         ##
 
-        prog_data.update({short_title + url_date + start_time: { 'img': "https:" + larger_img, 'cat': categories, 'subt': subtitle, 'ep_num': [episode_num_system, episode_num] }})
+        prog_data.update({short_title + prog_date + start_time: { 'img': "https:" + larger_img, 'cat': categories, 'subt': subtitle, 'ep_num': [episode_num_system, episode_num] }})
 
     return prog_data
 
