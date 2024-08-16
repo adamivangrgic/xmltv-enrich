@@ -114,9 +114,9 @@ def get_prog_data(url, cid, ssn_ep_dd_ids):
 
         ##
 
-        url_date_hour = int(url_date[:2])
+        prog_hour = int(start_time[:2])
 
-        if not 6 <= url_date_hour <= 23:
+        if not 6 <= prog_hour <= 23:
             next_day_date = datetime.strptime(url_date, "%Y%m%d") + datetime.timedelta(days=1)
             url_date = next_day_date.strftime("%Y%m%d")
 
