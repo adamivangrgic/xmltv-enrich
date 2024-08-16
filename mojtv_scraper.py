@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 mojtv_cat = {'/controlimg/program/k6.gif': 'serija', '/controlimg/program/k5.gif': 'film', '/controlimg/program/k2.gif': 'sport'}
 
@@ -117,7 +117,7 @@ def get_prog_data(url, cid, ssn_ep_dd_ids):
         prog_hour = int(start_time[:2])
 
         if not 6 <= prog_hour <= 23:
-            next_day_date = datetime.strptime(url_date, "%Y%m%d") + datetime.timedelta(days=1)
+            next_day_date = datetime.strptime(url_date, "%Y%m%d") + timedelta(days=1)
             url_date = next_day_date.strftime("%Y%m%d")
 
         ##
