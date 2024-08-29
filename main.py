@@ -3,14 +3,41 @@ import requests
 import xml.etree.ElementTree as ET
 import re
 from mojtv_scraper import scrape
+import pickle
+import os, os.path, time
 
 app = Flask(__name__)
+
+def get_prog_data(channel_ids, ssn_ep_dd, max_age=864000*3):
+    filename = 'prog_data.pkl'
+    
+    if os.path.isfile(filename):
+        file_creation_ts = os.stat(filename).st_mtime
+        now_ts = time.time()
+        diff = now_ts - file_creation_ts
+
+        print(diff)
+
+        if diff < max_age:
+            
+            with open(filename, 'rb') as f:
+                loaded_prog = pickle.load(f)
+                return loaded_prog
+    
+    scraped_prog = scrape(channel_ids, ssn_ep_dd)
+
+    with open(filename, 'wb') as f:
+        pickle.dump(scraped_prog, f)
+
+    return scraped_prog
+        
 
 @app.route('/')
 def enrich_endpoint():
     origin_url = request.args.get('origin_url')
     channel_id_list = [int(x) for x in request.args.get('cids').split(',')]
     ssn_ep_dd_ids_list = [int(x) for x in request.args.get('dd').split(',')]
+    max_age = int(request.args.get('max_age')) if request.args.get('max_age') else 864000*3
     ###
 
     r = requests.get(origin_url)
@@ -19,7 +46,7 @@ def enrich_endpoint():
 
     tree = ET.fromstring(origin_data) 
 
-    prog_data = scrape(channel_ids=channel_id_list, ssn_ep_dd=ssn_ep_dd_ids_list) # [1,2,310,3,4,185,186,341,370]
+    prog_data = get_prog_data(channel_ids=channel_id_list, ssn_ep_dd=ssn_ep_dd_ids_list, max_age=max_age) # [1,2,310,3,4,185,186,341,370]
 
     # import json
     
