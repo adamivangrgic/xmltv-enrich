@@ -2,3 +2,9 @@ git clone  https://@github.com/adamivangrgic/xmltv-enrich.git
 cd xmltv-enrich
 docker build -t xmltv-enrich .
 docker run --name xmltv-enrich -dp 9200:5000 xmltv-enrich
+
+endpoint: http://127.0.0.1:5000/?origin_url=http://192.168.1.2:9981/xmltv/channels&cids=1,2,310,3,4,185,186,341&dd=4,186&max_age=80000
+origin_url - original xmltv source url
+cids - channel ids (mojtv)
+dd - channel ids for "deep dive" i.e. for those whose information is not displayed in a table
+max_age - cached scrape results max age
