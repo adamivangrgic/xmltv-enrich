@@ -7,4 +7,4 @@ endpoint: http://127.0.0.1:5000/?origin_url=http://192.168.1.2:9981/xmltv/channe
 origin_url - original xmltv source url (tvheadend for example)
 cids - channel ids (mojtv)
 dd - channel ids for "deep dive" i.e. for those whose information is not displayed in a table
-max_age - cached scrape results max age
+max_age - cached scrape results max age in seconds
