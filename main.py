@@ -136,5 +136,5 @@ def enrich_endpoint():
     output_xml = ET.tostring(tree)
     return Response(output_xml, mimetype='text/xml')
 
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+# if __name__ == '__main__':
+#     app.run(debug=False, host='0.0.0.0')
