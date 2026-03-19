@@ -93,7 +93,7 @@ def get_prog_data(url, cid, ssn_ep_dd_ids):
 
         ##
 
-        short_title = " ".join(title.split(" ")[:4])
+        short_title = " ".join(title.split(" ")[:1])
 
         ##
 

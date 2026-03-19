@@ -56,7 +56,7 @@ def enrich_endpoint():
     
     for prog in tree.iter('programme'):
         long_title = prog.find('title').text
-        title = " ".join( long_title.split(" ")[:4] )
+        title = " ".join( long_title.split(" ")[:1] )
         
         start_time_raw = prog.attrib.get('start', '')
         if len(start_time_raw) > 11:
